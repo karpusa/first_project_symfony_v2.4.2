@@ -12,6 +12,6 @@ class DefaultController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('TwitterMainBundle:Default:index.html.twig');
+        return $this->render('TwitterMainBundle:Default:index.html.twig',array('csrf_token' => $this->container->get('form.csrf_provider')->generateCsrfToken('authenticate')));
     }
 }
