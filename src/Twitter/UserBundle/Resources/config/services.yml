@@ -1,0 +1,12 @@
+parameters:
+#    twitter_user.example.class: Twitter\UserBundle\Example
+
+services:
+#    twitter_user.example:
+#        class: %twitter_user.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
+    twitter_user.registration.form.type:
+        class: Twitter\UserBundle\Form\Type\RegistrationFormType
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: twitter_user_registration }
