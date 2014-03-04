@@ -1,5 +1,4 @@
 {% trans_default_domain 'FOSUserBundle' %}
-{% block fos_user_content %}
 
 <form action="{{ path("fos_user_security_check") }}" method="post">
     <h2 class="form-signin-heading">Войти</h2>
@@ -21,4 +20,4 @@
 </form>
     <h2 class="form-signin-heading">Впервые?</h2>
     <p><a href="{{ path('fos_user_registration_register') }}">Регистрация</a></p>
-{% endblock fos_user_content %}
+

@@ -96,4 +96,6 @@ fos_user:
     user_class: Twitter\UserBundle\Entity\User
     registration:
            form:
-               type: twitter_user_registration   
+               type: twitter_user_registration            
+cleentfaar_doctrine_table_prefix:
+    prefix: tw_               

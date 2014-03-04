@@ -1,18 +1,10 @@
 {% extends 'TwitterMainBundle::base.html.twig' %}
 
 {% block content %}
-    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-        {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
-        <a href="{{ path('fos_user_security_logout') }}">
-            {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
-        </a>
-    {% else %}
-        
-        <div class="form-signin">
-            {{ include(
-                'TwitterUserBundle:Security:login_mainpage.html.twig'
-            ) }}
-        </div>
-    {% endif %} 
+    <div class="form-signin">
+        {{ include(
+            'TwitterUserBundle:Security:login_mainpage.html.twig'
+        ) }}
+    </div>
 {% endblock %}
 

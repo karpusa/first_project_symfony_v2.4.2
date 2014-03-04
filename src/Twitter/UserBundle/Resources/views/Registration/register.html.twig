@@ -1,6 +1,6 @@
 {% extends 'TwitterMainBundle:Default:inner.html.twig' %}
 {% block content %}
-{% block fos_user_content %}
+{% if not is_granted("IS_AUTHENTICATED_REMEMBERED") %}
 {% include "FOSUserBundle:Registration:register_content.html.twig" %}
-{% endblock fos_user_content %}
+{% endif %}
 {% endblock %}

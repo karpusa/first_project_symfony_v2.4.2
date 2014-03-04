@@ -1,0 +1,61 @@
+Twitter\MainBundle\Entity\Tweet:
+    type: entity
+    repositoryClass: Twitter\MainBundle\Repository\TweetRepository    
+    table: tweet
+    indexes:
+        user_id:
+            columns:
+                - user_id
+        parent_id:
+            columns:
+                - parent_id
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        message:
+            type: string
+            nullable: true
+            length: 140
+            fixed: false
+            comment: ''
+        parentId:
+            type: integer
+            nullable: true
+            unsigned: false
+            comment: ''
+            column: parent_id
+        userIdParent:
+            type: integer
+            nullable: true
+            unsigned: false
+            comment: ''
+            column: user_id_parent
+        status:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: '0 - twit, 1 - reply, 2 - retwit'
+            default: '0'
+        createdAt:
+            type: datetime
+            nullable: false
+            comment: ''
+            column: created_at
+    manyToOne:
+        user:
+            targetEntity: Twitter\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

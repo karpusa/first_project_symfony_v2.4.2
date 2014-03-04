@@ -1,7 +1,6 @@
 twitter_user:
     resource: "@TwitterUserBundle/Resources/config/routing.yml"
     prefix:   /
-
 homepage:
     pattern:   /
     defaults: { _controller: TwitterMainBundle:Default:index }

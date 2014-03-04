@@ -1,0 +1,41 @@
+{% extends 'TwitterMainBundle::base.html.twig' %}
+
+{% block content %}
+
+    <div class="row-offcanvas row-offcanvas-right">
+        <div class="col-xs-12 col-sm-9">
+            <p class="toggle-nav pull-right visible-xs">
+                <button data-toggle="offcanvas" class="btn btn-primary btn-xs" type="button">Toggle nav</button>
+            </p>
+            <div class="row">            
+                <form class="write-tweet" method="post" {{ form_enctype(form_tweet) }}>
+                    {{ form_widget(form_tweet) }}
+                </form>
+            </div>
+
+            <div class="row">
+                <h1>Твиты</h1>
+
+                {% for tweet in tweet_items %}
+                <div class="list-group">
+                    <div class="list-group-item">
+                      <h4 class="list-group-item-heading"><a href="{{ path('twitter_main_homepage', {'twittername': tweet.user.usernameCanonical}) }}">{{ tweet.user.username }}</a></h4>
+                      <p class="list-group-item-text">{{ tweet.message }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+            <div class="list-group">
+              <a class="list-group-item active" href="#">Главная</a>
+              <a class="list-group-item" href="#">Мои твиты</a>
+              <a class="list-group-item" href="#">Я слежу (10)</a>
+              <a class="list-group-item" href="#">За мной следят (5)</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+

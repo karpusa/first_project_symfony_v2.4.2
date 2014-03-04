@@ -25,7 +25,9 @@
         "jquery/jquery":  "1.10.*",
         "leafo/lessphp": "0.4.0",
         
-        "friendsofsymfony/user-bundle": "~2.0@dev"
+        "friendsofsymfony/user-bundle": "~2.0@dev",
+        
+        "cleentfaar/doctrine-table-prefix-bundle": "*"
     },
     "repositories": [
         {

@@ -13,14 +13,47 @@
 </head>
 
 <body>
-    
     <div class="container">
+    {% block header %}    
+        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            <div role="navigation" class="navbar navbar-default">
+            <div class="container-fluid">
+              <div class="navbar-header">
+                <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
+                <a href="#" class="navbar-brand">Twitter Analog</a>
+              </div>
+              <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                  <li class="dropdown">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">Аккаунт <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                      <li class="dropdown-header">{{'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle')}}</li>
+                      <li>
+                        <a href="{{ path('fos_user_security_logout') }}">
+                            {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div><!--/.nav-collapse -->
+            </div><!--/.container-fluid -->  
+            </div>    
+        {% endif %} 
+    {% endblock %}   
+
     {% block content %}{% endblock %}
     </div>
     <!-- jQuery (necessary for Bootstraps JavaScript plugins) -->
     <script src="https://code.jquery.com/jquery.js"></script>
     <!-- Include all JavaScripts, compiled by Assetic -->
     <script src="{{ asset('/js/bootstrap.js') }}"></script>
+    <script src="{{ asset('/bundles/twittermain/js/offcanvas.js') }}"></script>    
     {% block javascripts %}{% endblock %}    
 </body>
 </html>
