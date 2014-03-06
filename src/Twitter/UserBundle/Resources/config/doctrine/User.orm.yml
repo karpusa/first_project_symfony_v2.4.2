@@ -1,5 +1,6 @@
 Twitter\UserBundle\Entity\User:
     type:  entity
+    repositoryClass: Twitter\UserBundle\Repository\UserRepository        
     table: fos_user
     id:
         id:

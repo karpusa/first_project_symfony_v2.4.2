@@ -4,9 +4,6 @@ twitter_user:
 homepage:
     pattern:   /
     defaults: { _controller: TwitterMainBundle:Default:index }
-twitter_main:
-    resource: "@TwitterMainBundle/Resources/config/routing.yml"
-    prefix:   /
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
 
@@ -25,3 +22,6 @@ fos_user_resetting:
 fos_user_change_password:
     resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
     prefix: /profile
+twitter_main:
+    resource: "@TwitterMainBundle/Resources/config/routing.yml"
+    prefix:   /

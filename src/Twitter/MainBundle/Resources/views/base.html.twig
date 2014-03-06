@@ -25,7 +25,7 @@
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
                 </button>
-                <a href="#" class="navbar-brand">Twitter Analog</a>
+                <a href="{{ path('homepage') }}" class="navbar-brand">Twitter Analog</a>
               </div>
               <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
@@ -46,8 +46,10 @@
             </div>    
         {% endif %} 
     {% endblock %}   
-
-    {% block content %}{% endblock %}
+    {% block search %}{% endblock %}
+    {% block main %}
+        {% block content %}{% endblock %}
+    {% endblock %}
     </div>
     <!-- jQuery (necessary for Bootstraps JavaScript plugins) -->
     <script src="https://code.jquery.com/jquery.js"></script>

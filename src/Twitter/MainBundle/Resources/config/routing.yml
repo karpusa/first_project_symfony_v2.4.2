@@ -1,3 +1,15 @@
 twitter_main_homepage:
     pattern:  /{twittername}
-    defaults: { _controller: TwitterMainBundle:Default:index }
+    defaults: { _controller: TwitterMainBundle:Default:index }   
+twitter_retwit_ajax:
+    pattern:  /retwit/
+    defaults: { _controller: TwitterMainBundle:Default:retwit }
+twitter_main_search:
+    pattern:  /search/
+    defaults: { _controller: TwitterMainBundle:Default:search }      
+twitter_main_ifollow:
+    pattern:  /following/
+    defaults: { _controller: TwitterMainBundle:Default:ifollow }    
+twitter_main_mefollow:
+    pattern:  /followers/
+    defaults: { _controller: TwitterMainBundle:Default:mefollow }        

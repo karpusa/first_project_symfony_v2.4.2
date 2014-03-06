@@ -11,24 +11,39 @@ use Doctrine\ORM\EntityRepository;
 class TweetRepository extends EntityRepository
 {
 
-
     public function findAllByIdJoinedToLike($user_id)
     {
         $query = $this->getEntityManager()
         ->createQuery('
-            SELECT t FROM TwitterMainBundle:Like l
-            LEFT JOIN TwitterMainBundle:Tweet t WITH l.user=t.user or t.user = :user_id
-            WHERE l.userFollow = :user_id
+            SELECT t FROM TwitterMainBundle:Tweet t
+            LEFT JOIN TwitterMainBundle:Like l WITH l.user=t.user
+            WHERE l.userFollow = :user_id OR t.user = :user_id OR t.userParent=:user_id
             ORDER BY t.createdAt DESC
             '
+               
         )->setParameter('user_id', $user_id);
-
         try {
             return $query->getResult();
         } catch (\Doctrine\ORM\NoResultException $e) {
             return null;
         }
     }
-
-
+    
+    public function findAllTweetsByUser($user_id){
+        $qb = $this->createQueryBuilder('tw');
+        $qb ->select('tw')
+            ->where($qb->expr()->orX(
+                $qb->expr()->eq('tw.user', ':user'),
+                $qb->expr()->eq('tw.userParent', ':userParent')
+            ))
+            ->orderBy('tw.createdAt', 'DESC')
+            ->setParameter('user', $user_id)
+            ->setParameter('userParent', $user_id); 
+        try {
+            return $qb->getQuery()->getResult();
+        } catch (\Doctrine\ORM\NoResultException $e) {
+            return null;
+        }        
+    }
+    
 }

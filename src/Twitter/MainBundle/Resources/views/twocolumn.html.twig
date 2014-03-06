@@ -1,0 +1,23 @@
+{% extends 'TwitterMainBundle::base.html.twig' %} 
+{% block main %}
+<div class="row-offcanvas row-offcanvas-right">
+    <div class="col-xs-12 col-sm-9">
+        {% block togglenav %}
+        <p class="toggle-nav pull-right visible-xs">
+            <button data-toggle="offcanvas" class="btn btn-primary btn-xs" type="button">Toggle nav</button>
+        </p>
+        {% endblock %}
+        {% block content %}{% endblock %}
+    </div> 
+    <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+        {% block sidebar %}
+                <div class="list-group">
+                  <a class="list-group-item" href="{{ path('homepage') }}">Главная</a>
+                  <a class="list-group-item" href="{{ path('twitter_main_homepage', {'twittername': app.user.usernameCanonical}) }}">Мои твиты</a>
+                  <a class="list-group-item" href="{{ path('twitter_main_ifollow') }}">Я слежу <span class="badge">{{ render(controller( 'TwitterMainBundle:Default:followersCount', { 'user_id': app.user.id } )) }}</span></a>
+                  <a class="list-group-item" href="{{ path('twitter_main_mefollow') }}">За мной следят <span class="badge">{{ render(controller( 'TwitterMainBundle:Default:followingCount', { 'user_id': app.user.id } )) }}</span></a>
+                </div>
+        {% endblock %}
+    </div>        
+</div>
+{% endblock %}

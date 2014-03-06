@@ -1,0 +1,27 @@
+{% extends 'TwitterMainBundle:Default:index_user.html.twig' %}
+
+{% block javascripts %}
+{% endblock %}
+
+
+{% block content %}
+            <div class="row">    
+                <h1>Поиск</h1>      
+                {% if not search_items %}  
+                <p>Не найдено!</p>
+                {% else %} 
+                <p>Найдено: {{ search_items | length }}.</p>
+                {% for search in search_items %}
+                <div class="list-group">                     
+                        <div class="list-group-item">
+                           <h4 class="list-group-item-heading"><a href="{{ path('twitter_main_homepage', {'twittername': search.usernameCanonical}) }}">{{search.username}}</a></h4>
+                            <p>Следит <span class="badge">{{ render(controller( 'TwitterMainBundle:Default:followersCount', { 'user_id': search.id } )) }}</span>
+                            Следят <span class="badge">{{ render(controller( 'TwitterMainBundle:Default:followingCount', { 'user_id': search.id } )) }}</span></p>   
+                            <a href="#" class="like-unlike btn btn-info">Следить</a>
+                        </div>                 
+                </div>
+                {% endfor %}
+                {% endif %}                 
+            </div>
+{% endblock %}
+

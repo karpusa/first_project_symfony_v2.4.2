@@ -1,0 +1,4 @@
+Twitter\MainBundle\Entity\Search:
+    properties:
+        name:
+            - NotBlank: ~

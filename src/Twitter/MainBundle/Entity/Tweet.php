@@ -192,4 +192,32 @@ class Tweet
     {
         return $this->user;
     }
+    /**
+     * @var \Twitter\UserBundle\Entity\User
+     */
+    private $userParent;
+
+
+    /**
+     * Set userParent
+     *
+     * @param \Twitter\UserBundle\Entity\User $userParent
+     * @return Tweet
+     */
+    public function setUserParent(\Twitter\UserBundle\Entity\User $userParent = null)
+    {
+        $this->userParent = $userParent;
+
+        return $this;
+    }
+
+    /**
+     * Get userParent
+     *
+     * @return \Twitter\UserBundle\Entity\User 
+     */
+    public function getUserParent()
+    {
+        return $this->userParent;
+    }
 }

@@ -1,0 +1,23 @@
+{% extends 'TwitterMainBundle:Default:index_user.html.twig' %}
+
+{% block javascripts %}
+{% endblock %}
+
+
+{% block content %}
+            <div class="row">    
+                <h1>За мной следят</h1>      
+                {% if not mefollow_items %}  
+                <p>Пока никто не следит!</p>
+                {% else %}
+                {% for mefollow in mefollow_items %}
+                <div class="list-group">                     
+                        <div class="list-group-item">
+                           <h4 class="list-group-item-heading"><a href="{{ path('twitter_main_homepage', {'twittername': mefollow.userFollow.usernameCanonical}) }}">{{mefollow.userFollow.username}}</a></h4>
+                        </div>                 
+                </div>
+                {% endfor %}
+                {% endif %}                 
+            </div>
+{% endblock %}
+

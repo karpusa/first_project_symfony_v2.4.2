@@ -1,41 +1,107 @@
-{% extends 'TwitterMainBundle::base.html.twig' %}
+{% extends 'TwitterMainBundle::twocolumn.html.twig' %}
+
+{% block javascripts %}
+<script>
+  $('.reply').click(
+      function(e){
+        e.preventDefault();
+        if($(this).nextAll('.reply-form').length){
+            $('.reply-form').remove();   
+        }else{
+            $(this).parent('.control-group').append('<form class="reply-form" action="{{ path(app.request.attributes.get('_route'),{twittername:currentaccount}) }}#twit-'+$(this).data('id')+'" method="post"><div class="form-group"><input type="hidden" name="reply_token" value="{{ csrf_token('reply_token') }}"><input type="hidden" name="reply_parent_id" value="'+$(this).data('id')+'"><textarea class="form-control" name="reply_message"></textarea></div><button class="btn btn-primary" type="submit">Отправить</button></form>');
+        }
+      }      
+  ); 
+  $('.retwit').click(
+      function(e){
+        e.preventDefault();
+        var id=$(this).data('id');
+        $.ajax({
+            type: "POST",
+            data: {'id':id},
+            url:"{{ path('twitter_retwit_ajax') }}",
+            cache: false,
+            success: function(response){
+                if (response==1){
+                    document.location.reload(true);
+                }else if (response==2){
+                    alert('Ретвит уже сделан!');
+                }
+            }
+        });        
+      }
+  );
+</script>
+{% endblock %}
+    
+{% block search %}
+    <div class="col-xs-18 col-sm-12">
+        <div class="row search-bg">
+            <form action="{{ path('twitter_main_search')}}" method="post" {{ form_enctype(form_search) }}>
+                {{ form_widget(form_search, { 'style': 'horizontal' }) }}                   
+            </form>
+        </div>
+    </div>
+{% endblock %}
 
 {% block content %}
-
-    <div class="row-offcanvas row-offcanvas-right">
-        <div class="col-xs-12 col-sm-9">
-            <p class="toggle-nav pull-right visible-xs">
-                <button data-toggle="offcanvas" class="btn btn-primary btn-xs" type="button">Toggle nav</button>
-            </p>
-            <div class="row">            
+            <div class="row">              
+            {% if currentaccount %}  
+                {% if currentaccount==app.user.usernameCanonical %}
+                <h1>Мои твиты</h1>
+                <p>Я слежу <span class="badge">{{ render(controller( 'TwitterMainBundle:Default:followersCount', { 'user_id': app.user.id } )) }}</span>
+                За мной следят <span class="badge">{{ render(controller( 'TwitterMainBundle:Default:followingCount', { 'user_id': app.user.id } )) }}</span></p>
                 <form class="write-tweet" method="post" {{ form_enctype(form_tweet) }}>
                     {{ form_widget(form_tweet) }}
                 </form>
+                {% else %}
+                <h1>Твиты {{ currentaccount }}</h1>
+                <p>Следит <span class="badge">{{ render(controller( 'TwitterMainBundle:Default:followersCount', { 'user_id': currentuser.id } )) }}</span>
+                Следят <span class="badge">{{ render(controller( 'TwitterMainBundle:Default:followingCount', { 'user_id': currentuser.id } )) }}</span></p>                
+                <p><a href="#" class="like-unlike btn btn-info">Следить</a></p>
+                {% endif %}
+            {% else %}
+                <form class="write-tweet" method="post" {{ form_enctype(form_tweet) }}>
+                    {{ form_widget(form_tweet) }}
+                </form>
+            {% endif %}
             </div>
-
             <div class="row">
-                <h1>Твиты</h1>
+                {% if currentaccount==false %}<h1>Твиты</h1>{% endif %}
 
                 {% for tweet in tweet_items %}
-                <div class="list-group">
-                    <div class="list-group-item">
-                      <h4 class="list-group-item-heading"><a href="{{ path('twitter_main_homepage', {'twittername': tweet.user.usernameCanonical}) }}">{{ tweet.user.username }}</a></h4>
-                      <p class="list-group-item-text">{{ tweet.message }}</p>
+                    {% if tweet.status==0 or tweet.status==2 %}
+                    <div class="list-group">
+                        <a name="twit-{{ tweet.id }}"></a>                        
+                        <div class="list-group-item">
+                          {% if tweet.status==0 %}
+                            <h4 class="list-group-item-heading"><a href="{{ path('twitter_main_homepage', {'twittername': tweet.user.usernameCanonical}) }}">{{ tweet.user.username }}</a></h4>
+                          {% endif %}
+                          {% if tweet.status==2 %}
+                            <h4 class="list-group-item-heading"><a href="{{ path('twitter_main_homepage', {'twittername': tweet.user.usernameCanonical}) }}">{{ tweet.user.username }}</a> ретвитнул <a href="{{ path('twitter_main_homepage', {'twittername': tweet.userParent.usernameCanonical}) }}">{{ tweet.userParent.username }}</a></h4>
+                          {% endif %}
+                          <p class="list-group-item-text">{{ tweet.message }}</p>
+                          <div class="control-group"><a href="#" class="reply" data-id="{{ tweet.id }}">Ответить</a>
+                            {% if tweet.user.id!=app.user.id %}  
+                                | <a href="#" class="retwit" data-id="{{ tweet.id }}">Повторить сообщение</a>
+                            {% endif %}
+                          </div>
+                            {% for tweet_reply in tweet_items %}
+                                {% if tweet_reply.status==1 and tweet_reply.parentId==tweet.id%}
+                                       <div class="list-group-item">
+                                         <h4 class="list-group-item-heading"><a href="{{ path('twitter_main_homepage', {'twittername': tweet_reply.user.usernameCanonical}) }}">{{ tweet_reply.user.username }}</a></h4>
+                                         <p class="list-group-item-text">{{ tweet_reply.message }}</p>
+                                       </div>                  
+                                {% endif %} 
+                            {% endfor %}                          
+                        </div>
                     </div>
-                </div>
+                    {% endif %}                
                 {% endfor %}
+                {% if not tweet_items %}
+                <p>Пока еще нету твитов.</p>
+                {% endif %}  
             </div>
-        </div>
-        
-        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
-            <div class="list-group">
-              <a class="list-group-item active" href="#">Главная</a>
-              <a class="list-group-item" href="#">Мои твиты</a>
-              <a class="list-group-item" href="#">Я слежу (10)</a>
-              <a class="list-group-item" href="#">За мной следят (5)</a>
-            </div>
-        </div>
-    </div>
 
 {% endblock %}
 

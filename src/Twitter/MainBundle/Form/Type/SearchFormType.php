@@ -14,26 +14,25 @@ namespace Twitter\MainBundle\Form\Type;
 use Symfony\Component\Form\AbstractType as BaseType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class TweetFormType extends BaseType
+class SearchFormType extends BaseType
 {
     
     public function getDefaultOptions(array $options)
     {
         return array(
-            'data_class' => 'Twitter\MainBundle\Entity\Tweet',
+            'data_class' => 'Twitter\MainBundle\Entity\Search',
         );
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('message', 'textarea', array('label' => 'Написать', 'attr'=>array('placeholder'=>'Ваш твит'), 'max_length' => 140))
-            ->add('save', 'submit', array('label'=>'Отправить'));
+            ->add('name', 'text', array('label' => 'Кого ищем?', 'attr'=>array('placeholder'=>'Пользователь')))
+            ->add('search', 'submit', array('label'=>'Поиск'));
     }    
-
 
     public function getName()
     {
-        return 'tweetform';
+        return 'searchform';
     }
 }

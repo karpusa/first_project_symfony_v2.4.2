@@ -1,5 +1,6 @@
 Twitter\MainBundle\Entity\Like:
     type: entity
+    repositoryClass: Twitter\MainBundle\Repository\LikeRepository    
     table: like
     indexes:
         user_id:

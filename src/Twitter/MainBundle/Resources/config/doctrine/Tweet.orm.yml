@@ -9,6 +9,9 @@ Twitter\MainBundle\Entity\Tweet:
         parent_id:
             columns:
                 - parent_id
+        user_id_parent:    
+            columns:
+                - user_id_parent
     id:
         id:
             type: integer
@@ -31,12 +34,6 @@ Twitter\MainBundle\Entity\Tweet:
             unsigned: false
             comment: ''
             column: parent_id
-        userIdParent:
-            type: integer
-            nullable: true
-            unsigned: false
-            comment: ''
-            column: user_id_parent
         status:
             type: integer
             nullable: false
@@ -58,4 +55,13 @@ Twitter\MainBundle\Entity\Tweet:
                 user_id:
                     referencedColumnName: id
             orphanRemoval: false
+        userParent:
+            targetEntity: Twitter\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id_parent:
+                    referencedColumnName: id
+            orphanRemoval: false            
     lifecycleCallbacks: {  }
