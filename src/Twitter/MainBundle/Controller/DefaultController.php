@@ -19,6 +19,9 @@ use Twitter\MainBundle\Entity\Search;
 
 class DefaultController extends Controller
 {
+    /**
+     * Twitter mainpage
+     */
     public function indexAction($twittername='')
     {
         if ($this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -90,7 +93,10 @@ class DefaultController extends Controller
             return $this->render('TwitterMainBundle:Default:index.html.twig',array('csrf_token' => $this->container->get('form.csrf_provider')->generateCsrfToken('authenticate')));
         }
     }
-    
+   
+    /**
+     * retwit message (ajax)
+     */    
     public function retwitAction()
     {
         $request=$this->get('request');
@@ -195,7 +201,7 @@ class DefaultController extends Controller
     }    
 
     /**
-     * Follow or unfollow user
+     * Follow or unfollow user (ajax)
      */        
     public function followUnFollowAction()
     {
