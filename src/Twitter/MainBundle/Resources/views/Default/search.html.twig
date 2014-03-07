@@ -1,6 +1,28 @@
 {% extends 'TwitterMainBundle:Default:index_user.html.twig' %}
 
 {% block javascripts %}
+<script>
+  $('.like-unlike').click(
+      function(e){
+        e.preventDefault();
+        var id=$(this).data('id');
+        var obj=$(this);
+        $.ajax({
+            type: "POST",
+            data: {'id':id},
+            url:"{{ path('twitter_main_followunfollow_ajax') }}",
+            cache: false,
+            success: function(response){
+                if (response==1){
+                    obj.text('Слежу');
+                }else if (response==2){
+                    obj.text('Следить');
+                }
+            }
+        });        
+      }
+  )
+</script>  
 {% endblock %}
 
 
@@ -17,7 +39,7 @@
                            <h4 class="list-group-item-heading"><a href="{{ path('twitter_main_homepage', {'twittername': search.usernameCanonical}) }}">{{search.username}}</a></h4>
                             <p>Следит <span class="badge">{{ render(controller( 'TwitterMainBundle:Default:followersCount', { 'user_id': search.id } )) }}</span>
                             Следят <span class="badge">{{ render(controller( 'TwitterMainBundle:Default:followingCount', { 'user_id': search.id } )) }}</span></p>   
-                            <a href="#" class="like-unlike btn btn-info">Следить</a>
+                            <a href="#" data-id="{{search.id}}" class="like-unlike btn btn-info">{%if search.likeid%}Слежу{%else%}Следить{%endif%}</a>
                         </div>                 
                 </div>
                 {% endfor %}

@@ -12,6 +12,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Twitter\MainBundle\Form\Type\TweetFormType;
 use Twitter\MainBundle\Entity\Tweet;
 
+use Twitter\MainBundle\Entity\Like;
+
 use Twitter\MainBundle\Form\Type\SearchFormType;
 use Twitter\MainBundle\Entity\Search;
 
@@ -98,7 +100,7 @@ class DefaultController extends Controller
                 return new Response(0);
             }
             $repository = $this->getDoctrine()->getRepository('TwitterMainBundle:Tweet');            
-            $retwit = $repository->findBy(
+            $retwit = $repository->findOneBy(
                 array('user' => $this->getUser()->getId(),'status'=>2,'parentId'=>$request->get("id"))
             );            
             if ($retwit){
@@ -175,4 +177,57 @@ class DefaultController extends Controller
         $repositoryLike = $this->getDoctrine()->getRepository('TwitterMainBundle:Like');                 
         return new Response($repositoryLike->followersCount($user_id)); 
     }    
+    
+    public function followUnFollowAction()
+    {
+        $request=$this->get('request');
+        if ($request->isXmlHttpRequest()) {
+            $id = $request->get("id");
+            if (!$id){
+                return new Response(0);
+            }
+            if ($id===$this->getUser()->getId()){
+                return new Response(0);
+            }
+            $em = $this->getDoctrine()->getManager(); 
+            $repository = $em->getRepository('TwitterMainBundle:Like');            
+            $followunfollow = $repository->findOneBy(
+                array('user' => $id)
+            );            
+            if ($followunfollow){
+                $em->remove($followunfollow);
+                $em->flush();
+                return new Response(2); //unfollow
+            }else{
+                $repositoryUser = $this->getDoctrine()->getRepository('TwitterUserBundle:User');                    
+                $user = $repositoryUser->findOneBy(
+                    array('id' => $id,'enabled'=>1)
+                );  
+                if (!$user){
+                    return new Response(0);                        
+                }                
+                $like = new Like();
+                $like->setUser($user);     
+                $like->setUserFollow($this->getUser());    
+                $em->persist($like);
+                $em->flush();                
+                return new Response(1); //follow
+            }
+        }
+        return new Response(0);
+    }       
+    
+    public function followOrNoAction($user)
+    {
+            $em = $this->getDoctrine()->getManager(); 
+            $repository = $em->getRepository('TwitterMainBundle:Like');            
+            $followunfollow = $repository->findOneBy(
+                array('user' => $user)
+            );            
+            if ($followunfollow){
+                return new Response('Слежу'); //follow
+            }else{
+                return new Response('Следить'); //unfollow                
+            }
+    }
 }

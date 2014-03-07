@@ -12,4 +12,7 @@ twitter_main_ifollow:
     defaults: { _controller: TwitterMainBundle:Default:ifollow }    
 twitter_main_mefollow:
     pattern:  /followers/
-    defaults: { _controller: TwitterMainBundle:Default:mefollow }        
+    defaults: { _controller: TwitterMainBundle:Default:mefollow }      
+twitter_main_followunfollow_ajax:
+    pattern:  /followunfollow/
+    defaults: { _controller: TwitterMainBundle:Default:followunfollow }       

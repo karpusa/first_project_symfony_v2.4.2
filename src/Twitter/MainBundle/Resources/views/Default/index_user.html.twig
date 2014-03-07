@@ -31,6 +31,26 @@
         });        
       }
   );
+  $('.like-unlike').click(
+      function(e){
+        e.preventDefault();
+        var id=$(this).data('id');
+        var obj=$(this);
+        $.ajax({
+            type: "POST",
+            data: {'id':id},
+            url:"{{ path('twitter_main_followunfollow_ajax') }}",
+            cache: false,
+            success: function(response){
+                if (response==1){
+                    obj.text('Слежу');
+                }else if (response==2){
+                    obj.text('Следить');
+                }
+            }
+        });        
+      }
+  )  
 </script>
 {% endblock %}
     
@@ -58,7 +78,9 @@
                 <h1>Твиты {{ currentaccount }}</h1>
                 <p>Следит <span class="badge">{{ render(controller( 'TwitterMainBundle:Default:followersCount', { 'user_id': currentuser.id } )) }}</span>
                 Следят <span class="badge">{{ render(controller( 'TwitterMainBundle:Default:followingCount', { 'user_id': currentuser.id } )) }}</span></p>                
-                <p><a href="#" class="like-unlike btn btn-info">Следить</a></p>
+                <p><a href="#" data-id="{{currentuser.id}}" class="like-unlike btn btn-info">{{ render(controller( 'TwitterMainBundle:Default:followOrNo', { 'user': currentuser } )) }}</a></p>
+                
+                
                 {% endif %}
             {% else %}
                 <form class="write-tweet" method="post" {{ form_enctype(form_tweet) }}>
