@@ -10,13 +10,14 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserRepository extends EntityRepository
 {
-    public function searchUserByName($username){
+    public function searchUserByName($username,$userfollow){
         $q = $this->getEntityManager()
         ->createQuery('
             SELECT u.usernameCanonical,u.username, u.id, l.id as likeid  FROM TwitterUserBundle:User u
-            LEFT JOIN TwitterMainBundle:Like l WITH l.user=u.id
+            LEFT JOIN TwitterMainBundle:Like l WITH l.user=u.id and l.userFollow=:userfollow
             WHERE u.usernameCanonical LIKE :username
-            ')->setParameter('username', '%'.$username.'%');
+            ')->setParameter('username', '%'.$username.'%')
+               ->setParameter('userfollow', $userfollow);
         try {
             return $q->getResult();
         } catch (\Doctrine\ORM\NoResultException $e) {

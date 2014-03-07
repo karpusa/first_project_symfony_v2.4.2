@@ -39,7 +39,9 @@
                            <h4 class="list-group-item-heading"><a href="{{ path('twitter_main_homepage', {'twittername': search.usernameCanonical}) }}">{{search.username}}</a></h4>
                             <p>Следит <span class="badge">{{ render(controller( 'TwitterMainBundle:Default:followersCount', { 'user_id': search.id } )) }}</span>
                             Следят <span class="badge">{{ render(controller( 'TwitterMainBundle:Default:followingCount', { 'user_id': search.id } )) }}</span></p>   
-                            <a href="#" data-id="{{search.id}}" class="like-unlike btn btn-info">{%if search.likeid%}Слежу{%else%}Следить{%endif%}</a>
+                            {% if search.id!=app.user.id %} 
+                                <a href="#" data-id="{{search.id}}" class="like-unlike btn btn-info">{%if search.likeid%}Слежу{%else%}Следить{%endif%}</a>
+                            {% endif %}
                         </div>                 
                 </div>
                 {% endfor %}

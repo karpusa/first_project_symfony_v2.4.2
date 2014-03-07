@@ -92,22 +92,27 @@
                 {% if currentaccount==false %}<h1>Твиты</h1>{% endif %}
 
                 {% for tweet in tweet_items %}
-                    {% if tweet.status==0 or tweet.status==2 %}
+
                     <div class="list-group">
                         <a name="twit-{{ tweet.id }}"></a>                        
                         <div class="list-group-item">
                           {% if tweet.status==0 %}
                             <h4 class="list-group-item-heading"><a href="{{ path('twitter_main_homepage', {'twittername': tweet.user.usernameCanonical}) }}">{{ tweet.user.username }}</a></h4>
                           {% endif %}
+                          {% if tweet.status==1 %}
+                            <h4 class="list-group-item-heading"><a href="{{ path('twitter_main_homepage', {'twittername': tweet.user.usernameCanonical}) }}">{{ tweet.user.username }}</a> ответил <a href="{{ path('twitter_main_homepage', {'twittername': tweet.userParent.usernameCanonical}) }}">{{ tweet.userParent.username }}</a> - <a href="{{ path('twitter_main_homepage', {'twittername': tweet.userParent.usernameCanonical}) }}#twit-{{tweet.parentId}}">посмотреть переписку</a></h4>
+                          {% endif %}                            
                           {% if tweet.status==2 %}
                             <h4 class="list-group-item-heading"><a href="{{ path('twitter_main_homepage', {'twittername': tweet.user.usernameCanonical}) }}">{{ tweet.user.username }}</a> ретвитнул <a href="{{ path('twitter_main_homepage', {'twittername': tweet.userParent.usernameCanonical}) }}">{{ tweet.userParent.username }}</a></h4>
                           {% endif %}
                           <p class="list-group-item-text">{{ tweet.message }}</p>
+                          {% if tweet.status!=1 %}
                           <div class="control-group"><a href="#" class="reply" data-id="{{ tweet.id }}">Ответить</a>
                             {% if tweet.user.id!=app.user.id %}  
                                 | <a href="#" class="retwit" data-id="{{ tweet.id }}">Повторить сообщение</a>
                             {% endif %}
                           </div>
+                         {% endif %}                          
                             {% for tweet_reply in tweet_items %}
                                 {% if tweet_reply.status==1 and tweet_reply.parentId==tweet.id%}
                                        <div class="list-group-item">
@@ -118,7 +123,7 @@
                             {% endfor %}                          
                         </div>
                     </div>
-                    {% endif %}                
+                       
                 {% endfor %}
                 {% if not tweet_items %}
                 <p>Пока еще нету твитов.</p>

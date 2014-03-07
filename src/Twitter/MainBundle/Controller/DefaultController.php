@@ -128,6 +128,9 @@ class DefaultController extends Controller
         return new Response(0);
     }    
 
+    /**
+     * Search user
+     */
     public function searchAction()
     {
         $search=new Search();
@@ -139,7 +142,7 @@ class DefaultController extends Controller
                 $form_search->bind($request);
                 if ($form_search->isValid()) {
                     $repository = $this->getDoctrine()->getRepository('TwitterUserBundle:User');   
-                    $usersearch = $repository->searchUserByName($search->getName());
+                    $usersearch = $repository->searchUserByName($search->getName(),$this->getUser());
                     return $this->render('TwitterMainBundle:Default:search.html.twig',array('form_search'=>$form_search->createView(),'search_items'=>$usersearch));
                 }
             }
@@ -147,6 +150,9 @@ class DefaultController extends Controller
         return $this->render('TwitterMainBundle:Default:search.html.twig',array('form_search'=>$form_search->createView(),'search_items'=>NULL));
     } 
     
+    /**
+     * My following
+     */    
     public function ifollowAction()
     {
         $search=new Search();
@@ -158,6 +164,9 @@ class DefaultController extends Controller
         return $this->render('TwitterMainBundle:Default:ifollow.html.twig',array('form_search'=>$form_search->createView(),'ifollow_items'=>$ifollow_items));
     } 
     
+    /**
+     * My followers
+     */ 
     public function mefollowAction()
     {
         $search=new Search();
@@ -169,15 +178,25 @@ class DefaultController extends Controller
         return $this->render('TwitterMainBundle:Default:mefollow.html.twig',array('form_search'=>$form_search->createView(),'mefollow_items'=>$mefollow_items));
     }        
     
+    /**
+     * Count following
+     */      
     public function followingCountAction($user_id){
         $repositoryLike = $this->getDoctrine()->getRepository('TwitterMainBundle:Like');                 
         return new Response($repositoryLike->followingCount($user_id)); 
     }
+    
+    /**
+     * Count followers
+     */     
     public function followersCountAction($user_id){
         $repositoryLike = $this->getDoctrine()->getRepository('TwitterMainBundle:Like');                 
         return new Response($repositoryLike->followersCount($user_id)); 
     }    
-    
+
+    /**
+     * Follow or unfollow user
+     */        
     public function followUnFollowAction()
     {
         $request=$this->get('request');
@@ -192,7 +211,7 @@ class DefaultController extends Controller
             $em = $this->getDoctrine()->getManager(); 
             $repository = $em->getRepository('TwitterMainBundle:Like');            
             $followunfollow = $repository->findOneBy(
-                array('user' => $id)
+                array('user' => $id,'userFollow' => $this->getUser()->getId())
             );            
             if ($followunfollow){
                 $em->remove($followunfollow);
@@ -217,12 +236,15 @@ class DefaultController extends Controller
         return new Response(0);
     }       
     
+    /**
+     * Show status user follow
+     */      
     public function followOrNoAction($user)
     {
             $em = $this->getDoctrine()->getManager(); 
             $repository = $em->getRepository('TwitterMainBundle:Like');            
             $followunfollow = $repository->findOneBy(
-                array('user' => $user)
+                array('user' => $user,'userFollow' => $this->getUser()->getId())                  
             );            
             if ($followunfollow){
                 return new Response('Слежу'); //follow
